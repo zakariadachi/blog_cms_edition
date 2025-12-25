@@ -1,12 +1,12 @@
 <?php
 
 class User {
-    protected int $id;
-    protected string $username;
-    protected string $email;
-    protected string $password;
-    protected DateTime $createdAt;
-    protected ?DateTime $lastLogin;
+    private int $id;
+    private string $username;
+    private string $email;
+    private string $password;
+    private DateTime $createdAt;
+    private ?DateTime $lastLogin;
 
     public function __construct(int $id,string $username,string $email,string $password)
     {
@@ -18,23 +18,30 @@ class User {
         $this->lastLogin = null;
     }
 
+    public function getUser_name()
+    {
+        $this->user_name=$username;
+    }
 
-    // isinstenceof
+    public function getEmail()
+    {
+        $this->email = $email;
+    }
 
     public function readArticle() 
     {
-
+        return "title: $this->getTitle";
     }
     
     public function writeComment() 
     {
-
+        
     }
 }
 
 class Author extends User {
     protected string $bio;
-    protected array $article;
+    protected array $articles = [];
 
     public function __construct(int $id,string $username,string $email,string $password,string $bio)
     {
@@ -42,15 +49,23 @@ class Author extends User {
         $this->bio = $bio;
     }
 
-    public function createArticle() 
+    public function createArticle(article $article) 
     {
-
+        $articles[]=$article;
     }
 
-    public function deleteOwnArticle() 
+    public function deleteOwnArticle(int $articleId)
     {
-
+    foreach ($this->articles as $index => $article) {
+        if ($article->getId() === $articleId) {
+            unset($this->articles[$index]);
+            return true;
+        }
     }
+        return false;
+    }
+    
+
 
     public function updateOwnArticle() 
     {
@@ -76,6 +91,10 @@ class Article {
         $this->updated_at = new DateTime();
     }
 
+
+    public function getTitle(){
+        $this->title=$title;
+    }
     public function addCategory(): bool 
     { 
 
