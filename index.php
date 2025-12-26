@@ -1,4 +1,58 @@
 <?php
+class Collection {
+protected $users = [];
+protected $articles = [];
+protected $categories = [];
+protected $current_user = null;
+
+public function __construct()
+{
+
+}
+
+public function readArticle()
+{
+      if (empty($this->articles)) {
+        echo "\nAucun article disponible pour le moment.\n";
+        return;
+    }
+
+    echo "\n===== LISTE DES ARTICLES =====\n";
+
+    foreach ($this->articles as $article) {
+        echo "Titre     : {$article['title']}\n";
+        echo "Auteur    : {$article['author']}\n";
+        echo "Contenu   : {$article['content']}\n";
+        echo "-----------------------------\n";
+    }
+}
+
+
+// MÉTHODE À IMPLÉMENTER :
+public function login($username, $password) {
+    foreach ($this->users as $user) {
+        if ($user->getUsername() === $username && $user->verifyPassword($password)) {
+            $this->current_user = $user;
+            return true;
+        }else
+            return false;
+    }
+        
+    }
+    public function logout() {
+       return $this->current_user = null;
+    }
+    public function getCurrentUser() {
+        return $this->current_user;
+    }
+    public function isLoggedIn() {
+        if($this->current_user)
+            return true;
+        else
+            return false;
+    }
+
+}
 
 class User {
     private int $id;
@@ -79,6 +133,7 @@ class Article {
     private string $title;
     private string $content;
     protected array $comment;
+    private string $statu;
     private DateTime $created_at;
     private DateTime $updated_at;
 
@@ -93,8 +148,14 @@ class Article {
 
 
     public function getTitle(){
-        $this->title=$title;
+        return $this->title=$title;
     }
+
+    public function getStatus()
+    {
+        return $this->statu;
+    }
+
     public function addCategory(): bool 
     { 
 
@@ -114,7 +175,7 @@ class Article {
     }
     public function archiver(): bool 
     {
-
+        
     }
 }
 
@@ -132,9 +193,12 @@ class Category {
 
     }
 
-    public function update(array $data): bool 
+    public function update(): bool 
     {
-
+        if($this->getStatus()=="draft")
+            $this->getStatus()=="published";
+        else
+            $this->getStatus()=="draft";
     }
 
     public function delete(): bool 
