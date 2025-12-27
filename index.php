@@ -32,7 +32,7 @@ public function readArticle()
 public function login($username, $password) {
     foreach ($this->users as $user) {
         if ($user->getUsername() === $username && $user->verifyPassword($password)) {
-            $this->current_user = $user;
+            
             return true;
         }else
             return false;
@@ -79,10 +79,15 @@ class User {
 
     public function getEmail()
     {
-        $this->email = $email;
+       return $this->email = $email;
     }
 
-    public function readArticle() 
+    public function verifyPassword()
+    {
+        return $password === $this->password;
+    }
+
+    public function readArticle()
     {
         return "title: $this->getTitle";
     }
@@ -105,7 +110,7 @@ class Author extends User {
 
     public function createArticle(article $article) 
     {
-        $articles[]=$article;
+        $this->articles[]=$article;
     }
 
     public function deleteOwnArticle(int $articleId)
@@ -123,7 +128,13 @@ class Author extends User {
 
     public function updateOwnArticle() 
     {
-
+        foreach ($this->articles as $index => $article) 
+        {
+            if ($article->getId() === $articleId) {
+            return true;
+            }
+        }
+        return false;     
     }
 
 }
